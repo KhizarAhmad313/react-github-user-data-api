@@ -1,24 +1,34 @@
-import logo from './logo.svg';
-import './App.css';
-
+import React, { useEffect, useState } from "react";
+import Card from "./components/Card/Card";
+import "./App.css";
 function App() {
+  const [userData, setUserData] = useState([]);
+  useEffect(() => {
+    fetch("https://api.github.com/users")
+      .then((res) => res.json())
+      .then((data) => {
+        setUserData(data);
+      });
+  }, []);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <h1>
+        React App for Fetching and Displaying GitHub User Data through API
+      </h1>
+      <div className="container">
+        {userData.map((user, index) => {
+          // console.log(user);
+          return (
+            <Card
+              key={index}
+              userName={user.login}
+              avatar={user.avatar_url}
+              url={user.html_url}
+            />
+          );
+        })}
+      </div>
+    </>
   );
 }
 
